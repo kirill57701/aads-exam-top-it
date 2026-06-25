@@ -20,14 +20,14 @@ namespace petrov
       for (size_t i = 0; i < s; ++i)
       {
         new_v[i] = vec[i];
-        delete vec[i];
       }
       delete[] vec;
       vec = new_v;
       c = new_c;
-    } else {
       vec[++s] = p;
+      return;
     }
+    vec[++s] = p;
   }
 }
 
