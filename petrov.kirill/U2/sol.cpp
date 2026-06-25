@@ -157,5 +157,56 @@ namespace petrov
           ps.dat = nd;
           ps.c = nc;
         }
+        ps.dat[ps.s].id = id1;
+        ps.dat[ps.s].info = "";
+        ps.dat[ps.s].h_i = 0;
+        ps.dat[ps.s].del = 0;
+        ps.s = ps.s + 1;
+      }
+      if (!f2) {
+        if (ps.s == ps.c) {
+          size_t nc = ps.c * 2;
+          if (nc == 0) {
+            nc = 2;
+          }
+          Person* nd = new Person[nc];
+          for (size_t i = 0; i < ps.s; ++i) {
+            nd[i] = ps.dat[i];
+          }
+          delete[] ps.dat;
+          ps.dat = nd;
+          ps.c = nc;
+        }
+        ps.dat[ps.s].id = id2;
+        ps.dat[ps.s].info = "";
+        ps.dat[ps.s].h_i = 0;
+        ps.dat[ps.s].del = 0;
+        ps.s = ps.s + 1;
+      }
+      if (ms.s == ms.c) {
+        size_t nc = ms.c * 2;
+        if (nc == 0) {
+          nc = 2;
+        }
+        Meeting* nd = new Meeting[nc];
+        for (size_t i = 0; i < ms.s; ++i) {
+          nd[i] = ms.dat[i];
+        }
+        delete[] ms.dat;
+        ms.dat = nd;
+        ms.c = nc;
+      }
+      ms.dat[ms.s].i1 = id1;
+      ms.dat[ms.s].i2 = id2;
+      ms.dat[ms.s].t = len;
+      ms.dat[ms.s].del = 0;
+      ms.s = ms.s + 1;
+    }
+    if (f_dt.fail() && !f_dt.eof()) {
+      std::cerr << "read err\n";
+      delete[] ps.dat;
+      delete[] ms.dat;
+      return 3;
+    }
   }
 }
