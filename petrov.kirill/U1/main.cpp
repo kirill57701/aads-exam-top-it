@@ -3,7 +3,7 @@
 #include <string>
 #include "person.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
   if (argc > 3)
   {
@@ -53,6 +53,32 @@ int main(int argc, char* argv[])
       return 2;
     }
     out = &fout;
+  }
+
+  petrov::Person* vec = nullptr;
+  size_t s = 0, c = 0, ok = 0, err = 0;
+  while(*in)
+  {
+    size_t id_v;
+    if (!(*in >> id_v))
+    {
+      in->clear();
+      std::string trash;
+      if (std::getline(*in, trash))
+      {
+        size_t q = 0;
+        for (size_t i = 0; i < trash.size(); ++i)
+        {
+          if (trash[i] != ' ' && trash[i] != '\n' && trash[i] == '\r')
+          {
+            q = 1;
+            break;
+          }
+        }
+      }
+      err += q;
+    }
+    continue;
   }
   return 0;
 }
