@@ -208,5 +208,90 @@ namespace petrov
       delete[] ms.dat;
       return 3;
     }
+    std::string cmd = "";
+    while (std::cin >> cmd) {
+      if (cmd == "anons") {
+        size_t ac = 0;
+        for (size_t i = 0; i < ps.s; ++i) {
+          if (ps.dat[i].del == 0 && ps.dat[i].h_i == 0) {
+            ac = ac + 1;
+          }
+        }
+        if (ac > 0) {
+          size_t* arr = new size_t[ac];
+          size_t cur = 0;
+          for (size_t i = 0; i < ps.s; ++i) {
+            if (ps.dat[i].del == 0 && ps.dat[i].h_i == 0) {
+              arr[cur] = ps.dat[i].id;
+              cur = cur + 1;
+            }
+          }
+          for (size_t i = 0; i < ac; ++i) {
+            for (size_t j = i + 1; j < ac; ++j) {
+              if (arr[i] > arr[j]) {
+                size_t tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+              }
+            }
+          }
+          for (size_t i = 0; i < ac; ++i) {
+            std::cout << arr[i] << "\n";
+          }
+          delete[] arr;
+        }
+      } else if (cmd == "deanon") {
+        size_t an_id = 0;
+        size_t r_id = 0;
+        if (!(std::cin >> an_id >> r_id)) {
+          std::cin.clear();
+          std::string dummy = "";
+          std::cin >> dummy;
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        int p_an = -1;
+        int p_r = -1;
+        for (size_t i = 0; i < ps.s; ++i) {
+          if (ps.dat[i].del == 0 && ps.dat[i].id == an_id) {
+            p_an = static_cast<int>(i);
+          }
+          if (ps.dat[i].del == 0 && ps.dat[i].id == r_id) {
+            p_r = static_cast<int>(i);
+          }
+        }
+        if (p_an == -1 || p_r == -1 || ps.dat[p_an].h_i != 0 || ps.dat[p_r].h_i == 0) {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        ps.dat[p_an].del = 1;
+        for (size_t i = 0; i < ms.s; ++i) {
+          if (ms.dat[i].del == 0) {
+            if (ms.dat[i].i1 == an_id) {
+              ms.dat[i].i1 = r_id;
+            }
+            if (ms.dat[i].i2 == an_id) {
+              ms.dat[i].i2 = r_id;
+            }
+            if (ms.dat[i].i1 == ms.dat[i].i2) {
+              ms.dat[i].del = 1;
+            }
+          }
+        }
+      } else if (cmd == "redesc") {
+        size_t r_id = 0;
+        if (!(std::cin >> r_id)) {
+          std::cin.clear();
+          std::string dummy = "";
+          std::cin >> dummy;
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        char ch = 0;
+        while (std::cin.get(ch)) {
+          if (ch != ' ' && ch != '\t' && ch != '\n') {
+            break;
+          }
+        }
   }
 }
