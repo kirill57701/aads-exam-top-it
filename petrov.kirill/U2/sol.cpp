@@ -365,10 +365,10 @@ namespace petrov
           std::cout << "<INVALID COMMAND>\n";
           continue;
         }
-                bool ex = false;
+                bool ex = 0;
         for (size_t i = 0; i < ps.s; ++i) {
           if (ps.dat[i].del == 0 && ps.dat[i].id == r_id) {
-            ex = true;
+            ex = 1;
           }
         }
         if (!ex) {
@@ -404,12 +404,12 @@ namespace petrov
           }
           for (size_t i = 0; i < mc; ++i) {
             for (size_t j = i + 1; j < mc; ++j) {
-              bool swp = false;
+              bool swp = 0;
               if (arr[i].first > arr[j].first) {
-                swp = true;
+                swp = 1;
               } else if (arr[i].first == arr[j].first) {
                 if (arr[i].second > arr[j].second) {
-                  swp = true;
+                  swp = 1;
                 }
               }
               if (swp) {
@@ -434,15 +434,15 @@ namespace petrov
           std::cout << "<INVALID COMMAND>\n";
           continue;
         }
-        bool ex_a = false;
-        bool ex_b = false;
+        bool ex_a = 0;
+        bool ex_b = 0;
         for (size_t i = 0; i < ps.s; ++i) {
           if (ps.dat[i].del == 0) {
             if (ps.dat[i].id == id_a) {
-              ex_a = true;
+              ex_a = 1;
             }
             if (ps.dat[i].id == id_b) {
-              ex_b = true;
+              ex_b = 1;
             }
           }
         }
@@ -454,15 +454,15 @@ namespace petrov
         for (size_t i = 0; i < ps.s; ++i) {
           if (ps.dat[i].del == 0) {
             size_t cid = ps.dat[i].id;
-            bool m_a = false;
-            bool m_b = false;
+            bool m_a = 0;
+            bool m_b = 0;
             for (size_t j = 0; j < ms.s; ++j) {
               if (ms.dat[j].del == 0) {
                 if ((ms.dat[j].i1 == id_a && ms.dat[j].i2 == cid) || (ms.dat[j].i2 == id_a && ms.dat[j].i1 == cid)) {
-                  m_a = true;
+                  m_a = 1;
                 }
                 if ((ms.dat[j].i1 == id_b && ms.dat[j].i2 == cid) || (ms.dat[j].i2 == id_b && ms.dat[j].i1 == cid)) {
-                  m_b = true;
+                  m_b = 1;
                 }
               }
             }
@@ -471,5 +471,70 @@ namespace petrov
             }
           }
         }
+        if (cc > 0) {
+          size_t* arr = new size_t[cc];
+          size_t cur = 0;
+          for (size_t i = 0; i < ps.s; ++i) {
+            if (ps.dat[i].del == 0) {
+              size_t cid = ps.dat[i].id;
+              bool m_a = false;
+              bool m_b = false;
+              for (size_t j = 0; j < ms.s; ++j) {
+                if (ms.dat[j].del == 0) {
+                  if ((ms.dat[j].i1 == id_a && ms.dat[j].i2 == cid) || (ms.dat[j].i2 == id_a && ms.dat[j].i1 == cid)) {
+                    m_a = true;
+                  }
+                  if ((ms.dat[j].i1 == id_b && ms.dat[j].i2 == cid) || (ms.dat[j].i2 == id_b && ms.dat[j].i1 == cid)) {
+                    m_b = true;
+                  }
+                }
+              }
+              if (m_a && m_b) {
+                arr[cur] = cid;
+                cur = cur + 1;
+              }
+            }
+          }
+          for (size_t i = 0; i < cc; ++i) {
+            for (size_t j = i + 1; j < cc; ++j) {
+              if (arr[i] > arr[j]) {
+                size_t tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+              }
+            }
+          }
+          for (size_t i = 0; i < cc; ++i) {
+            std::cout << arr[i] << "\n";
+          }
+          delete[] arr;
+        }
+      } else if (cmd == "out-persons") {
+        std::string path = "";
+        if (!(std::cin >> path)) {
+          std::cin.clear();
+          std::string dummy = "";
+          std::cin >> dummy;
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        std::ofstream f_out(path.c_str());
+        if (!f_out) {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        for (size_t i = 0; i < ps.s; ++i) {
+          if (ps.dat[i].del == 0 && ps.dat[i].h_i == 1) {
+            f_out << ps.dat[i].id << " " << ps.dat[i].info << "\n";
+          }
+        }
+      } else {
+        std::cout << "<INVALID COMMAND>\n";
+      }
+    }
+
+    delete[] ps.dat;
+    delete[] ms.dat;
+    return 0;
   }
 }
