@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 {
   if (argc > 3)
   {
-    return 2;
+    return 1;
   }
 
   std::string file_in = "";
@@ -31,28 +31,21 @@ int main(int argc, char** argv)
   }
 
   std::istream* in = &std::cin;
-  std::ostream* out = &std::cout;
   std::ifstream fin;
-  std::ofstream fout;
 
   if (file_in != "")
   {
     fin.open(file_in);
     if (!fin.is_open())
     {
-      return 2;
+      return 1;
     }
     in = &fin;
   }
 
-  if (file_out != "")
+  if (in->peek() == std::char_traits<char>::eof())
   {
-    fout.open(file_out);
-    if (!fout.is_open())
-    {
-      return 2;
-    }
-    out = &fout;
+    return 0;
   }
 
   petrov::Person* vec = nullptr;
@@ -110,6 +103,7 @@ int main(int argc, char** argv)
     petrov::Person p;
     p.id = id_v;
     p.info = inf;
+
     if (petrov::is_dubl(vec, p, s) == 0)
     {
       err++;
@@ -135,6 +129,21 @@ int main(int argc, char** argv)
     s++;
     ok++;
   }
+
+  std::ostream* out = &std::cout;
+  std::ofstream fout;
+
+  if (file_out != "")
+  {
+    fout.open(file_out);
+    if (!fout.is_open())
+    {
+      delete[] vec;
+      return 1;
+    }
+    out = &fout;
+  }
+
   for (size_t i = 0; i < s; ++i)
   {
     *out << vec[i].id << " " << vec[i].info << "\n";
