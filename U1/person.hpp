@@ -29,6 +29,14 @@ namespace petrov
     }
     vec[s++] = p;
   }
+  size_t is_dubl(Person* vec, Person p, size_t s, size_t c)
+  {
+    for (size_t i = 0; i < s; ++i)
+    {
+      if (vec[i].info == p.info) return 0;
+    }
+    return 1;
+  }
 }
 
 #endif
