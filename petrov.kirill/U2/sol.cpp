@@ -88,10 +88,10 @@ namespace petrov
           continue;
         }
         std::string txt = l.substr(id);
-        bool dup = false;
+        bool dup = 0;
         for (size_t i = 0; i < ps.s; ++i) {
           if (ps.dat[i].id == num) {
-            dup = true;
+            dup = 1;
             break;
           }
         }
@@ -133,14 +133,14 @@ namespace petrov
       if (id1 == id2) {
         continue;
       }
-      bool f1 = false;
-      bool f2 = false;
+      bool f1 = 0;
+      bool f2 = 0;
       for (size_t i = 0; i < ps.s; ++i) {
         if (ps.dat[i].id == id1) {
-          f1 = true;
+          f1 = 1;
         }
         if (ps.dat[i].id == id2) {
-          f2 = true;
+          f2 = 1;
         }
       }
       if (!f1) {
@@ -292,6 +292,78 @@ namespace petrov
           if (ch != ' ' && ch != '\t' && ch != '\n') {
             break;
           }
+        }
+        if (ch != '"') {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        std::string desc_str = "";
+        bool ok = 0;
+        while (std::cin.get(ch)) {
+          if (ch == '"') {
+            ok = 1;
+            break;
+          }
+          desc_str = desc_str + ch;
+        }
+        if (!ok) {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        int p_idx = -1;
+        for (size_t i = 0; i < ps.s; ++i) {
+          if (ps.dat[i].del == 0 && ps.dat[i].id == r_id) {
+            p_idx = static_cast<int>(i);
+          }
+        }
+        if (p_idx == -1) {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        ps.dat[p_idx].info = desc_str;
+        ps.dat[p_idx].h_i = 1;
+      } else if (cmd == "desc") {
+        size_t r_id = 0;
+        if (!(std::cin >> r_id)) {
+          std::cin.clear();
+          std::string dummy = "";
+          std::cin >> dummy;
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        int p_idx = -1;
+        for (size_t i = 0; i < ps.s; ++i) {
+          if (ps.dat[i].del == 0 && ps.dat[i].id == r_id) {
+            p_idx = static_cast<int>(i);
+          }
+        }
+        if (p_idx == -1) {
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
+        }
+        if (ps.dat[p_idx].h_i == 0) {
+          std::cout << "<ANON>\n";
+        } else {
+          std::cout << ps.dat[p_idx].info << "\n";
+        }
+      } else if (cmd == "meets" || cmd == "less" || cmd == "greater") {
+        size_t limit = 0;
+        if (cmd == "less" || cmd == "greater") {
+          if (!(std::cin >> limit)) {
+            std::cin.clear();
+            std::string dummy = "";
+            std::cin >> dummy;
+            std::cout << "<INVALID COMMAND>\n";
+            continue;
+          }
+        }
+        size_t r_id = 0;
+        if (!(std::cin >> r_id)) {
+          std::cin.clear();
+          std::string dummy = "";
+          std::cin >> dummy;
+          std::cout << "<INVALID COMMAND>\n";
+          continue;
         }
   }
 }
