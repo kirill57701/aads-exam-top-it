@@ -6,8 +6,12 @@ namespace petrov
 {
   struct Person
   {
-    size_t id;
+    size_t id, h_i, del;
     std::string info;
+  };
+  struct Meeting
+  {
+    size_t i1, i2, t, del;
   };
 }
 
