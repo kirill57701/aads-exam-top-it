@@ -7,7 +7,8 @@ int main(int argc, char** argv)
 {
   if (argc > 3)
   {
-    return 1;
+    std::cerr << "Error: Too many arguments\n";
+    return 0;
   }
 
   std::string file_in = "";
@@ -31,28 +32,33 @@ int main(int argc, char** argv)
   }
 
   std::istream* in = &std::cin;
-  std::ostream* out = &std::cout;
   std::ifstream fin;
-  std::ofstream fout;
 
   if (file_in != "")
   {
     fin.open(file_in);
     if (!fin.is_open())
     {
-      return 2;
+      return 1;
     }
     in = &fin;
   }
 
-  if (file_out != "")
+  if (in->peek() == std::char_traits<char>::eof())
   {
-    fout.open(file_out);
-    if (!fout.is_open())
+    std::ostream* out = &std::cout;
+    std::ofstream fout;
+    if (file_out != "")
     {
-      return 2;
+      fout.open(file_out);
+      if (!fout.is_open())
+      {
+        return 1;
+      }
+      out = &fout;
     }
-    out = &fout;
+    *out << "\n";
+    return 0;
   }
 
   petrov::Person* vec = nullptr;
@@ -62,6 +68,10 @@ int main(int argc, char** argv)
     size_t id_v;
     if (!(*in >> id_v))
     {
+      if (in->eof())
+      {
+        break;
+      }
       in->clear();
       std::string trash;
       if (std::getline(*in, trash))
@@ -106,7 +116,8 @@ int main(int argc, char** argv)
     petrov::Person p;
     p.id = id_v;
     p.info = inf;
-    if (petrov::is_dubl(vec, p, s, c) == 0)
+
+    if (petrov::is_dubl(vec, p, s) == 0)
     {
       err++;
       continue;
@@ -131,6 +142,21 @@ int main(int argc, char** argv)
     s++;
     ok++;
   }
+
+  std::ostream* out = &std::cout;
+  std::ofstream fout;
+
+  if (file_out != "")
+  {
+    fout.open(file_out);
+    if (!fout.is_open())
+    {
+      delete[] vec;
+      return 1;
+    }
+    out = &fout;
+  }
+
   for (size_t i = 0; i < s; ++i)
   {
     *out << vec[i].id << " " << vec[i].info << "\n";
