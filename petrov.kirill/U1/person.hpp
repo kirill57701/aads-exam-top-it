@@ -29,7 +29,7 @@ namespace petrov
     }
     vec[s++] = p;
   }
-  size_t is_dubl(Person* vec, Person p, size_t s, size_t c)
+  size_t is_dubl(Person* vec, Person p, size_t s)
   {
     for (size_t i = 0; i < s; ++i)
     {
