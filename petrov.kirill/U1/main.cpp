@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include "person.hpp"
 
 int main(int argc, char** argv)
@@ -31,9 +32,7 @@ int main(int argc, char** argv)
   }
 
   std::istream* in = &std::cin;
-  std::ostream* out = &std::cout;
   std::ifstream fin;
-  std::ofstream fout;
 
   if (file_in != "")
   {
@@ -43,16 +42,6 @@ int main(int argc, char** argv)
       return 2;
     }
     in = &fin;
-  }
-
-  if (file_out != "")
-  {
-    fout.open(file_out);
-    if (!fout.is_open())
-    {
-      return 2;
-    }
-    out = &fout;
   }
 
   petrov::Person* vec = nullptr;
@@ -106,7 +95,7 @@ int main(int argc, char** argv)
     petrov::Person p;
     p.id = id_v;
     p.info = inf;
-    if (petrov::is_dubl(vec, p, s) == 0)
+    if (petrov::is_dubl(vec, p, s, c) == 0)
     {
       err++;
       continue;
@@ -131,11 +120,36 @@ int main(int argc, char** argv)
     s++;
     ok++;
   }
+
+  if (file_in != "")
+  {
+    fin.close();
+  }
+
+  std::ostream* out = &std::cout;
+  std::ofstream fout;
+
+  if (file_out != "")
+  {
+    fout.open(file_out);
+    if (!fout.is_open())
+    {
+      delete[] vec;
+      return 2;
+    }
+    out = &fout;
+  }
+
   for (size_t i = 0; i < s; ++i)
   {
     *out << vec[i].id << " " << vec[i].info << "\n";
   }
-  std::cerr << ok << " " << err << "\n";
+
+  if (ok != 0 || err != 0)
+  {
+    std::cerr << ok << " " << err << "\n";
+  }
+
   delete[] vec;
   return 0;
 }
