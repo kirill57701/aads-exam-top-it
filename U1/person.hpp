@@ -2,10 +2,13 @@
 #define PERSON_HPP
 #include <string>
 
-struct Person
+namespace petrov
 {
-  size_t id;
-  std::string info;
+  struct Person
+  {
+    size_t id;
+    std::string info;
+  }
 }
 
 #endif
