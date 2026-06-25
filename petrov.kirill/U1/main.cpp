@@ -75,10 +75,17 @@ int main(int argc, char** argv)
             break;
           }
         }
+        err += q;
       }
-      err += q;
+      continue;
     }
-    continue;
+    std::string inf;
+    std::getline(*in, inf);
+    size_t st = 0;
+    while (st < inf.size() && inf[st] == ' ' || inf[st] == '\n' || inf[st] == '\r')
+    {
+      st++;
+    }
   }
   return 0;
 }
