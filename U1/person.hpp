@@ -33,10 +33,11 @@ namespace petrov
   {
     for (size_t i = 0; i < s; ++i)
     {
-      if (vec[i].info == p.info) return 0;
+      if (vec[i].id == p.id) return 0;
     }
     return 1;
   }
+
 }
 
 #endif
