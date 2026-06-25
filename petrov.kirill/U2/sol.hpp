@@ -13,6 +13,16 @@ namespace petrov
   {
     size_t i1, i2, t, del;
   };
+  struct Pvec
+  {
+    Person* dat;
+    size_t s, c;
+  };
+  struct Mvec
+  {
+    Meeting* dat;
+    size_t s, c;
+  };
 }
 
 #endif
